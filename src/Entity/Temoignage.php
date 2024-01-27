@@ -25,6 +25,9 @@ class Temoignage
     #[ORM\Column]
     private ?int $notes = null;
 
+    #[ORM\Column]
+    private ?bool $actif = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Temoignage
     public function setNotes(int $notes): static
     {
         $this->notes = $notes;
+
+        return $this;
+    }
+
+    public function isActif(): ?bool
+    {
+        return $this->actif;
+    }
+
+    public function setActif(bool $actif): static
+    {
+        $this->actif = $actif;
 
         return $this;
     }
