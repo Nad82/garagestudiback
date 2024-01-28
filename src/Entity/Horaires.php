@@ -5,13 +5,25 @@ namespace App\Entity;
 use App\Repository\HorairesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as assert;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: HorairesRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'horaires:item']),
+        new GetCollection(normalizationContext: ['groups' => 'horaires:list'])
+    ],
+    paginationEnabled: false,
+)]
 class Horaires
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['horaires:item', 'horaires:list'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
@@ -22,6 +34,7 @@ class Horaires
         minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
         maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
     )]
+    #[Groups(['horaires:item', 'horaires:list'])]
     private ?string $lundi = null;
 
     #[ORM\Column(length: 50)]
@@ -32,6 +45,7 @@ class Horaires
         minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
         maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
     )]
+    #[Groups(['horaires:item', 'horaires:list'])]
     private ?string $mardi = null;
 
     #[ORM\Column(length: 50)]
@@ -42,6 +56,7 @@ class Horaires
         minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
         maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
     )]
+    #[Groups(['horaires:item', 'horaires:list'])]
     private ?string $mercredi = null;
 
     #[ORM\Column(length: 50)]
@@ -52,6 +67,7 @@ class Horaires
         minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
         maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
     )]
+    #[Groups(['horaires:item', 'horaires:list'])]
     private ?string $jeudi = null;
 
     #[ORM\Column(length: 50)]
@@ -62,6 +78,7 @@ class Horaires
         minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
         maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
     )]
+    #[Groups(['horaires:item', 'horaires:list'])]
     private ?string $vendredi = null;
 
     #[ORM\Column(length: 50)]
@@ -72,6 +89,7 @@ class Horaires
         minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
         maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
     )]
+    #[Groups(['horaires:item', 'horaires:list'])]
     private ?string $samedi = null;
 
     #[ORM\Column(length: 50)]
@@ -82,6 +100,7 @@ class Horaires
         minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
         maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
     )]
+    #[Groups(['horaires:item', 'horaires:list'])]
     private ?string $dimanche = null;
 
     public function getId(): ?int

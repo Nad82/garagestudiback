@@ -5,8 +5,23 @@ namespace App\Entity;
 use App\Repository\FormulaireGRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as assert;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+
 
 #[ORM\Entity(repositoryClass: FormulaireGRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(
+            read: false,
+            output: false
+        ),
+        new Post(denormalizationContext: ['groups' => 'formulaireG:write']),
+    ]
+)]
 class FormulaireG
 {
     #[ORM\Id]
@@ -15,6 +30,7 @@ class FormulaireG
     private ?int $id = null;
 
     #[ORM\Column(length: 30)]
+    #[Groups('formulaireG:write')]
     #[Assert\NotBlank(message: 'Veuillez saisir votre nom')]
     #[assert\Length(
         min: 2,
@@ -25,6 +41,7 @@ class FormulaireG
     private ?string $nom = null;
 
     #[ORM\Column(length: 30)]
+    #[Groups('formulaireG:write')]
     #[assert\NotBlank(message: 'Veuillez saisir votre prénom')]
     #[assert\Length(
         min: 2,
@@ -35,6 +52,7 @@ class FormulaireG
     private ?string $prenom = null;
 
     #[ORM\Column(length: 40)]
+    #[Groups('formulaireG:write')]
     #[assert\NotBlank(message: 'Veuillez saisir votre email')]
     #[assert\Email(message: 'Veuillez saisir un email valide')]
     #[assert\Length(
@@ -46,6 +64,7 @@ class FormulaireG
     private ?string $email = null;
 
     #[ORM\Column(length: 15)]
+    #[Groups('formulaireG:write')]
     #[assert\NotBlank(message: 'Veuillez saisir votre numéro de téléphone')]
     #[assert\Length(
         min: 10,
@@ -60,6 +79,7 @@ class FormulaireG
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('formulaireG:write')]
     #[assert\NotBlank(message: 'Veuillez saisir votre message')]
     #[assert\Length(
         min: 2,

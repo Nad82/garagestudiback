@@ -5,8 +5,24 @@ namespace App\Entity;
 use App\Repository\TemoignageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as assert;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: TemoignageRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'temoignage:read']),
+        new GetCollection(
+            normalizationContext: ['groups' => 'temoignage:list']
+        ),
+        new Post(denormalizationContext: ['groups' => 'temoignage:write'])
+    ],
+    paginationItemsPerPage: 3
+)]
 class Temoignage
 {
     #[ORM\Id]
@@ -22,6 +38,7 @@ class Temoignage
         minMessage: 'Le nom doit contenir au moins 2 caractères',
         maxMessage: 'Le nom ne doit pas dépasser 30 caractères'
     )]
+    #[Groups('temoignage:read', 'temoignage:write', 'temoignage:list')]
     private ?string $nom = null;
 
     #[ORM\Column(length: 30)]
@@ -32,6 +49,7 @@ class Temoignage
         minMessage: 'Le prénom doit contenir au moins 2 caractères',
         maxMessage: 'Le prénom ne doit pas dépasser 30 caractères'
     )]
+    #[Groups('temoignage:read', 'temoignage:write', 'temoignage:list')]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
@@ -42,15 +60,18 @@ class Temoignage
         minMessage: 'Le commentaire doit contenir au moins 2 caractères',
         maxMessage: 'Le commentaire ne doit pas dépasser 255 caractères'
     )]
+    #[Groups('temoignage:read', 'temoignage:write', 'temoignage:list')]
     private ?string $commentaires = null;
 
     #[ORM\Column]
     #[assert\NotBlank(message: 'Veuillez saisir une note')]
     #[assert\Positive(message: 'Veuillez saisir une note positive')]
     #[assert\LessThanOrEqual(value: 5, message: 'Veuillez saisir une note inférieure ou égale à 5')]
+    #[Groups('temoignage:read', 'temoignage:write', 'temoignage:list')]
     private ?int $notes = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[Groups('temoignage:read', 'temoignage:list')]
     private ?bool $actif = null;
 
     public function getId(): ?int

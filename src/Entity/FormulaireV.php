@@ -5,8 +5,22 @@ namespace App\Entity;
 use App\Repository\FormulaireVRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as assert;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: FormulaireVRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(
+            read: false,
+            output: false
+        ),
+        new Post(denormalizationContext: ['groups' => 'formulaireV:write']),
+    ]
+)]
 class FormulaireV
 {
     #[ORM\Id]
@@ -22,6 +36,7 @@ class FormulaireV
         minMessage: 'Le nom doit contenir au moins 2 caractères',
         maxMessage: 'Le nom ne doit pas dépasser 30 caractères'
     )]
+    #[Groups('formulaireV:write')]
     private ?string $nom = null;
 
     #[ORM\Column(length: 30)]
@@ -32,6 +47,7 @@ class FormulaireV
         minMessage: 'Le prénom doit contenir au moins 2 caractères',
         maxMessage: 'Le prénom ne doit pas dépasser 30 caractères'
     )]
+    #[Groups('formulaireV:write')]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 30)]
@@ -43,6 +59,7 @@ class FormulaireV
         minMessage: 'L\'email doit contenir au moins 2 caractères',
         maxMessage: 'L\'email ne doit pas dépasser 30 caractères'
     )]
+    #[Groups('formulaireV:write')]
     private ?string $email = null;
 
     #[ORM\Column(length: 15)]
@@ -53,6 +70,11 @@ class FormulaireV
         minMessage: 'Le numéro de téléphone doit contenir au moins 10 caractères',
         maxMessage: 'Le numéro de téléphone ne doit pas dépasser 15 caractères'
     )]
+    #[assert\Regex(
+        pattern: '/^[0-9]+$/',
+        message: 'Le numéro de téléphone ne doit contenir que des chiffres'
+    )]
+    #[Groups('formulaireV:write')]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
@@ -63,9 +85,11 @@ class FormulaireV
         minMessage: 'Le message doit contenir au moins 2 caractères',
         maxMessage: 'Le message ne doit pas dépasser 255 caractères'
     )]
+    #[Groups('formulaireV:write')]
     private ?string $message = null;
 
     #[ORM\ManyToOne(inversedBy: 'formulaireVs')]
+    #[Groups('Vehicule:read')]
     private ?Vehicule $vehicule = null;
 
     public function getId(): ?int

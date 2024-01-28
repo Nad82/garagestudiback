@@ -7,13 +7,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as assert;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
+#[
+    ApiResource(
+        operations: [
+            new Get(normalizationContext: ['groups' => 'vehicule:item']),
+            new GetCollection(normalizationContext: ['groups' => 'vehicule:list'])
+        ],
+        paginationItemsPerPage: 3
+    )
+]
 class Vehicule
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['vehicule:item', 'vehicule:list'])]
     private ?int $id = null;
 
     #[ORM\Column]
@@ -24,6 +38,7 @@ class Vehicule
         minMessage: 'Le prix doit contenir au moins 1 caractère',
         maxMessage: 'Le prix ne doit pas dépasser 10 caractères'
     )]
+    #[Groups(['vehicule:item', 'vehicule:list'])]
     private ?int $prix = null;
 
     #[ORM\Column]
@@ -34,6 +49,7 @@ class Vehicule
         minMessage: 'L\'année doit contenir au moins 1 caractère',
         maxMessage: 'L\'année ne doit pas dépasser 4 caractères'
     )]
+    #[Groups(['vehicule:item', 'vehicule:list'])]
     private ?int $annee = null;
 
     #[ORM\Column]
@@ -44,7 +60,7 @@ class Vehicule
         minMessage: 'Le kilométrage doit contenir au moins 1 caractère',
         maxMessage: 'Le kilométrage ne doit pas dépasser 10 caractères'
     )]
-    #[assert\Regex(pattern: '/^[0-9]{1,10}$/')]
+    #[Groups(['vehicule:item', 'vehicule:list'])]
     private ?int $kilometrage = null;
 
     #[ORM\Column(length: 255)]
@@ -55,9 +71,11 @@ class Vehicule
         minMessage: 'Les équipements doivent contenir au moins 1 caractère',
         maxMessage: 'Les équipements ne doivent pas dépasser 255 caractères'
     )]
+    #[Groups(['vehicule:item', 'vehicule:list'])]
     private ?string $equipements = null;
 
     #[ORM\OneToMany(mappedBy: 'vehicule', targetEntity: FormulaireV::class)]
+    #[Groups(['vehicule:item', 'vehicule:list'])]
     private Collection $formulaireVs;
 
     #[ORM\OneToMany(
@@ -66,6 +84,7 @@ class Vehicule
         cascade: ['persist'],
         orphanRemoval: true
     )]
+    #[Groups(['vehicule:item', 'vehicule:list'])]
     private Collection $imageFiles;
 
     public function __construct()
