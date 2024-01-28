@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\HorairesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as assert;
 
 #[ORM\Entity(repositoryClass: HorairesRepository::class)]
 class Horaires
@@ -13,25 +14,74 @@ class Horaires
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[assert\NotBlank(message: 'Veuillez saisir les horaires d\'ouverture')]
+    #[assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
+        maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
+    )]
     private ?string $lundi = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[assert\NotBlank(message: 'Veuillez saisir les horaires d\'ouverture')]
+    #[assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
+        maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
+    )]
     private ?string $mardi = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[assert\NotBlank(message: 'Veuillez saisir les horaires d\'ouverture')]
+    #[assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
+        maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
+    )]
     private ?string $mercredi = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[assert\NotBlank(message: 'Veuillez saisir les horaires d\'ouverture')]
+    #[assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
+        maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
+    )]
     private ?string $jeudi = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[assert\NotBlank(message: 'Veuillez saisir les horaires d\'ouverture')]
+    #[assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
+        maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
+    )]
     private ?string $vendredi = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[assert\NotBlank(message: 'Veuillez saisir les horaires d\'ouverture')]
+    #[assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
+        maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
+    )]
     private ?string $samedi = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[assert\NotBlank(message: 'Veuillez saisir les horaires d\'ouverture')]
+    #[assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Les horaires d\'ouverture doivent contenir au moins 2 caractères',
+        maxMessage: 'Les horaires d\'ouverture ne doivent pas dépasser 50 caractères'
+    )]
     private ?string $dimanche = null;
 
     public function getId(): ?int

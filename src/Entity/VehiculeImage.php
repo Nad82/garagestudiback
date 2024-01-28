@@ -4,14 +4,20 @@ namespace App\Entity;
 
 use App\Repository\VehiculeImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: VehiculeImageRepository::class)]
+#[Vich\Uploadable]
 class VehiculeImage
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[Vich\UploadableField(mapping: 'vehicules', fileNameProperty: 'nom', size: 'taille')]
+    private ?file $imageFile = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
@@ -28,6 +34,19 @@ class VehiculeImage
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function getImageFile(): ?file
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?file $imageFile): self
+    {
+        $this->imageFile = $imageFile;
+        if (null !== $imageFile) {
+            $this->updateAt = new \DateTimeImmutable();
+        }
+        return $this;
     }
 
     public function getNom(): ?string
@@ -76,5 +95,10 @@ class VehiculeImage
         $this->vehicule = $vehicule;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->nom;
     }
 }

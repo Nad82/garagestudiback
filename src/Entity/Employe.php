@@ -6,6 +6,8 @@ use App\Repository\EmployeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as assert;
+use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 
 #[ORM\Entity(repositoryClass: EmployeRepository::class)]
 class Employe implements UserInterface, PasswordAuthenticatedUserInterface
@@ -15,7 +17,15 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 40, unique: true)]
+    #[assert\NotBlank(message: 'Veuillez saisir un email')]
+    #[assert\Email(message: 'Veuillez saisir un email valide')]
+    #[assert\Length(
+        min: 8,
+        max: 40,
+        minMessage: 'L\'email doit contenir au moins 8 caractère',
+        maxMessage: 'L\'email ne doit pas dépasser 40 caractères'
+    )]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -25,6 +35,10 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[assert\NotBlank(message: 'Veuillez saisir un mot de passe')]
+    #[assert\Length(min: 8, minMessage: 'Le mot de passe doit contenir au moins 8 caractères')]
+    #[assert\EqualTo(propertyPath: 'confirm_password', message: 'Les mots de passe ne correspondent pas')]
+    #[SecurityAssert\UserPassword(message: 'Le mot de passe est incorrect')]
     private ?string $password = null;
 
     public function getId(): ?int

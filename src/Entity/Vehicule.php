@@ -6,6 +6,7 @@ use App\Repository\VehiculeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as assert;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
 class Vehicule
@@ -16,27 +17,61 @@ class Vehicule
     private ?int $id = null;
 
     #[ORM\Column]
+    #[assert\NotBlank(message: 'Veuillez saisir un prix')]
+    #[assert\Length(
+        min: 1,
+        max: 10,
+        minMessage: 'Le prix doit contenir au moins 1 caractère',
+        maxMessage: 'Le prix ne doit pas dépasser 10 caractères'
+    )]
     private ?int $prix = null;
 
     #[ORM\Column]
+    #[assert\NotBlank(message: 'Veuillez saisir une année')]
+    #[assert\Length(
+        min: 1,
+        max: 4,
+        minMessage: 'L\'année doit contenir au moins 1 caractère',
+        maxMessage: 'L\'année ne doit pas dépasser 4 caractères'
+    )]
     private ?int $annee = null;
 
     #[ORM\Column]
+    #[assert\NotBlank(message: 'Veuillez saisir un kilométrage')]
+    #[assert\Length(
+        min: 1,
+        max: 10,
+        minMessage: 'Le kilométrage doit contenir au moins 1 caractère',
+        maxMessage: 'Le kilométrage ne doit pas dépasser 10 caractères'
+    )]
+    #[assert\Regex(pattern: '/^[0-9]{1,10}$/')]
     private ?int $kilometrage = null;
 
     #[ORM\Column(length: 255)]
+    #[assert\NotBlank(message: 'Veuillez saisir des équipements')]
+    #[assert\Length(
+        min: 1,
+        max: 255,
+        minMessage: 'Les équipements doivent contenir au moins 1 caractère',
+        maxMessage: 'Les équipements ne doivent pas dépasser 255 caractères'
+    )]
     private ?string $equipements = null;
 
     #[ORM\OneToMany(mappedBy: 'vehicule', targetEntity: FormulaireV::class)]
     private Collection $formulaireVs;
 
-    #[ORM\OneToMany(mappedBy: 'vehicule', targetEntity: VehiculeImage::class)]
-    private Collection $vehiculeImages;
+    #[ORM\OneToMany(
+        mappedBy: 'vehicule',
+        targetEntity: VehiculeImage::class,
+        cascade: ['persist'],
+        orphanRemoval: true
+    )]
+    private Collection $imageFiles;
 
     public function __construct()
     {
         $this->formulaireVs = new ArrayCollection();
-        $this->vehiculeImages = new ArrayCollection();
+        $this->imageFiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,24 +160,24 @@ class Vehicule
     /**
      * @return Collection<int, VehiculeImage>
      */
-    public function getVehiculeImages(): Collection
+    public function getImageFiles(): Collection
     {
-        return $this->vehiculeImages;
+        return $this->imageFiles;
     }
 
-    public function addVehiculeImage(VehiculeImage $vehiculeImage): static
+    public function addImageFile(VehiculeImage $vehiculeImage): static
     {
-        if (!$this->vehiculeImages->contains($vehiculeImage)) {
-            $this->vehiculeImages->add($vehiculeImage);
+        if (!$this->imageFiles->contains($vehiculeImage)) {
+            $this->imageFiles->add($vehiculeImage);
             $vehiculeImage->setVehicule($this);
         }
 
         return $this;
     }
 
-    public function removeVehiculeImage(VehiculeImage $vehiculeImage): static
+    public function removeImageFile(VehiculeImage $vehiculeImage): static
     {
-        if ($this->vehiculeImages->removeElement($vehiculeImage)) {
+        if ($this->imageFiles->removeElement($vehiculeImage)) {
             // set the owning side to null (unless already changed)
             if ($vehiculeImage->getVehicule() === $this) {
                 $vehiculeImage->setVehicule(null);
